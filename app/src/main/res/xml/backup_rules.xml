@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Full backup rules for Android 11 and below (API ≤ 30).
+    Excludes the Room database from auto-backup.
+-->
+<full-backup-content>
+    <exclude domain="database" path="todo_database" />
+    <exclude domain="database" path="todo_database-shm" />
+    <exclude domain="database" path="todo_database-wal" />
+</full-backup-content>
