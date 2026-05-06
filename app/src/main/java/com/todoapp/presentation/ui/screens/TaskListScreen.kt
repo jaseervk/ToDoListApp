@@ -10,7 +10,9 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.DarkMode
 import androidx.compose.material.icons.filled.DeleteSweep
+import androidx.compose.material.icons.filled.LightMode
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -44,6 +46,8 @@ import kotlinx.coroutines.launch
 @Composable
 fun TaskListScreen(
     viewModel: TaskViewModel = hiltViewModel(),
+    isDarkTheme: Boolean,
+    onToggleTheme: () -> Unit,
     onPlayAdd: () -> Unit,
     onPlayComplete: () -> Unit,
     onPlayDelete: () -> Unit
@@ -91,6 +95,8 @@ fun TaskListScreen(
             // ── Header ──────────────────────────────────────────────────
             TaskListHeader(
                 pendingCount = uiState.pendingCount,
+                isDarkTheme = isDarkTheme,
+                onToggleTheme = onToggleTheme,
                 onClearCompleted = { showClearConfirm = true }
             )
 
@@ -211,6 +217,8 @@ fun TaskListScreen(
 @Composable
 private fun TaskListHeader(
     pendingCount: Int,
+    isDarkTheme: Boolean,
+    onToggleTheme: () -> Unit,
     onClearCompleted: () -> Unit
 ) {
     var showMenu by remember { mutableStateOf(false) }
@@ -244,6 +252,21 @@ private fun TaskListHeader(
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.primary,
                     fontWeight = FontWeight.Medium
+                )
+            }
+        }
+
+        // Theme toggle button
+        IconButton(onClick = onToggleTheme) {
+            Crossfade(
+                targetState = isDarkTheme,
+                animationSpec = tween(300),
+                label = "themeIcon"
+            ) { dark ->
+                Icon(
+                    imageVector = if (dark) Icons.Default.LightMode else Icons.Default.DarkMode,
+                    contentDescription = if (dark) "Switch to light mode" else "Switch to dark mode",
+                    tint = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f)
                 )
             }
         }
